@@ -1,0 +1,15 @@
+<?php
+	$store = $this->getStoreOptions();	
+	$option='';
+	foreach($store as $st){
+		$option.='<option value="'.$st['value'].'">'.$st['label'].'</option>';
+	}
+	echo '<div class="admin__field">
+    <label for="version_name" class="admin__field-label">Version Name</label>
+    <input type="text" class="admin__control-text" id="version_name" name="version_name" aria-describedby="emailHelp" placeholder="Enter Version Name">     
+  </div>
+  <div class="admin__field">
+    <label for="store_view" class="admin__field-label">Store View</label>
+    <select class="admin__control-text" id="store_view">'.$option.'</select>
+  </div>';
+?>

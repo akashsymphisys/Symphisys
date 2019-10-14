@@ -1,0 +1,28 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="pagebuilder-stage-wrapper"
+     css="'stage-full-screen': isFullScreen"
+     ko-style="wrapperStyles">
+    <div class="admin__field pagebuilder-header">
+        <i click="function() { toggleFullScreen($element); }"
+           css="'icon-pagebuilder-fullscreen': !isFullScreen(), 'icon-pagebuilder-fullscreen-exit': isFullScreen()"
+           attr="{title: isFullScreen() ? $t('Close Full Screen') : $t('Open in Full Screen')}">
+        </i>
+		<button click="function() { popupFunction(); }">Load Content Grid</button>
+		<button click="function() { saveFunction(); }">Save Content Grid</button>
+    </div>	
+    <with args="panel">
+        <render/>
+    </with>
+    <if args="isStageReady">
+        <with args="stage">
+            <render/>
+        </with>
+    </if>	
+</div>
+<div id="popup-modal"></div>
+<div id="popup-modal-save"></div>

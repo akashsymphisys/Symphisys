@@ -1,0 +1,86 @@
+<?php
+$filter = $this->getFilters();
+$collection = $this->getCollection($filter);
+?>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 content_migration_section">
+<span class='msg'></span>
+	<ul>
+		<?php foreach($collection as $list){ ?>
+			
+			<li class="grid-data col-md-3 col-sm-3 col-xs-3" id="item-<?php echo $list['id'] ?>">
+			<div class="img-section">
+				<img src='<?php echo $list['preview_image'] ?>' alt="" width="200px" />
+				<span class="version-name-section"><?php echo $list['version_name'] ?></span>
+			</div>
+			<div class="action-section">
+				<span class="load-section"><a href="javascript:void(0)" id="template-<?php echo $list['id'] ?>" class="load-btn"><?= $block->escapeHtml(__('Load')) ?></a></span>
+				<span class="delete-section"><a href="javascript:void(0)" id="content-<?php echo $list['id'] ?>" class="delete-btn"><?= $block->escapeHtml(__('Delete')) ?></a></span>
+			</div>
+		</li>
+		
+		<?php }?>		
+	<ul>
+</div> 
+<script>
+require(["jquery",'mage/url'], function ($,urlBuilder) {
+	$(document).ready(function($) { 	
+		var logoHrefUrl = $('.menu-wrapper a.logo').attr('href');
+		var parts = logoHrefUrl.split("/");
+		var last_part = parts[parts.length-2];
+		var front_part = parts[parts.length-3];
+		var res = logoHrefUrl.replace(last_part+'/', '');
+		var resBase = res.replace(front_part+'/', '');
+		urlBuilder.setBaseUrl(resBase);
+		$(".delete-btn").click(function(){		
+			var removeID =  $(this).attr('id');	
+			var res = removeID.split("-");
+			if(res[1]!=''){			
+			  var url = urlBuilder.build(front_part+'/loadcontent/loadcontent/deleteitem');
+			  $.ajax({
+					url:url,
+					type:'POST',
+					data:{form_key: window.FORM_KEY,item_id:res[1]},
+					showLoader: true,
+					dataType:'json',			
+					complete: function(response) {						
+						if(response.responseText==1){
+							$(".msg").addClass('success');
+							$(".msg").html('Selected layout deleted successfully..');
+							$("#item-"+res[1]).remove();
+						}else if(response.responseText==0){
+							$(".msg").addClass('error');
+							$(".msg").html('Try again..');							
+						}
+					},					
+					error: function (xhr, ajaxOptions, thrownError) {
+						$(".msg").addClass('error');
+						$(".msg").html('Error:'+thrownError);						
+					}
+				});
+			}			 
+		});
+		$(".load-btn").click(function(){				
+			var removeID =  $(this).attr('id');	
+			var res = removeID.split("-");
+			if(res[1]!=''){						 	
+			  var url = urlBuilder.build(front_part+'/loadcontent/loadcontent/loaditem');
+			  $.ajax({
+					url:url,
+					type:'POST',
+					data:{form_key: window.FORM_KEY,item_id:res[1]},
+					showLoader: true,
+					dataType:'json',			
+					complete: function(response) {						
+						//console.log(response.responseText)
+						//editorJS.activeEditor.setContent(response.responseText);
+					},					
+					error: function (xhr, ajaxOptions, thrownError) {
+						$(".msg").addClass('error');
+						$(".msg").html('Error:'+thrownError);						
+					}
+				});
+			}			 
+		});
+	});
+});
+</script>
